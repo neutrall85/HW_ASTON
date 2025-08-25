@@ -1,4 +1,4 @@
-package homeworks.modul3;
+package ru.aston.homework.modul3;
 
 import java.nio.file.Paths;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package homeworks.modul3;
+package ru.aston.homework.modul3;
 
 import java.util.Scanner;
 
