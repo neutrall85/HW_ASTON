@@ -1,9 +1,10 @@
 package ru.aston.homework.modul3;
 
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.nio.file.StandardOpenOption;
+
 
 class FileWriter implements FileProcessor {
     private String filePath;
@@ -20,9 +21,11 @@ class FileWriter implements FileProcessor {
             if (Files.exists(Paths.get(filePath))) {
                 if (Files.size(Paths.get(filePath)) > 0) {
                     Files.writeString(Paths.get(filePath), "\n" + content, StandardOpenOption.APPEND);
+                } else {
+                    Files.writeString(Paths.get(filePath), content, StandardOpenOption.WRITE);
                 }
             } else {
-                Files.writeString(Paths.get(filePath), content);
+                Files.writeString(Paths.get(filePath), content, StandardOpenOption.CREATE);
             }
             System.out.println("Данные успешно записаны в файл");
         } catch (IOException e) {

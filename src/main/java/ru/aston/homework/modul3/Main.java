@@ -1,52 +1,69 @@
 package ru.aston.homework.modul3;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
+    private static Map<UserChoice, UserChoiceStrategy> choiceToStrategy = new HashMap<>();
+
+    static {
+        choiceToStrategy.put(UserChoice.WRITE, new WriteStrategy());
+        choiceToStrategy.put(UserChoice.READ, new ReadStrategy());
+        choiceToStrategy.put(UserChoice.DELETE_DATA, new DeleteStrategy());
+        choiceToStrategy.put(UserChoice.EXIT, new ExitStrategy());
+    }
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
+            boolean running = true;
+            boolean showMenu = true;
 
-        try {
-            System.out.println("Выберите действие:");
-            System.out.println("1. Записать данные в файл");
-            System.out.println("2. Прочитать данные из файла");
-            System.out.println("3. Выход");
+            while (running) {
+                try {
+                    if (showMenu) {
+                        System.out.println("\nВыберите действие:");
+                        System.out.println("1. Записать данные в файл (WRITE)");
+                        System.out.println("2. Прочитать данные из файла (READ)");
+                        System.out.println("3. Удалить файл (DELETE_DATA)");
+                        System.out.println("4. Выйти (EXIT)");
+                    }
 
-            System.out.print("Ваш выбор: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+                    System.out.print("Введите команду: ");
+                    String input = scanner.nextLine();
 
-            switch (choice) {
-                case 1:
-                    System.out.print("Введите путь к файлу: ");
-                    String filePath = scanner.nextLine();
-                    System.out.print("Введите текст для записи: ");
-                    String text = scanner.nextLine();
-                    FileProcessor writer = new FileWriter(filePath, text);
-                    writer.process();
-                    break;
+                    UserChoice choice;
+                    try {
+                        choice = UserChoice.valueOf(input.toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Неверный выбор. Попробуйте еще раз.");
+                        continue;
+                    }
 
-                case 2:
-                    System.out.print("Введите путь к файлу: ");
-                    filePath = scanner.nextLine();
-                    FileProcessor reader = new FileReader(filePath);
-                    reader.process();
-                    break;
+                    UserChoiceStrategy strategy = choiceToStrategy.get(choice);
 
-                case 3:
-                    System.out.println("Программа завершена");
-                    System.exit(0);
-                    break;
+                    if (strategy == null) {
+                        System.out.println("Неизвестная команда. Попробуйте еще раз.");
+                        continue;
+                    }
 
-                default:
-                    System.err.println("Неверный выбор. Попробуйте еще раз.");
+                    try {
+                        strategy.invoke(scanner);
+                        showMenu = true;
+                    } catch (MyFileException e) {
+                        System.out.println();
+                        System.err.println("Ошибка: " + e.getMessage());
+                        showMenu = false;
+                    }
+                } catch (Exception e) {
+                    System.out.println();
+                    System.err.println("Произошла ошибка: " + e.getMessage());
+                    showMenu = false;
+                }
             }
-
-        } catch (MyFileException e) {
-            System.err.println(e.getMessage());
-        } catch (NumberFormatException e) {
-            System.err.println("Ошибка: введите число!");
+        } catch (Exception e) {
+            System.err.println("Ошибка ввода: " + e.getMessage());
         } finally {
-            scanner.close();
+            System.out.println("Программа завершена");
         }
     }
 }
