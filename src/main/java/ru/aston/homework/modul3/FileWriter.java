@@ -7,8 +7,8 @@ import java.nio.file.StandardOpenOption;
 
 
 class FileWriter implements FileProcessor {
-    private String filePath;
-    private String content;
+    private final String filePath;
+    private final String content;
 
     FileWriter(String filePath, String content) {
         this.filePath = filePath;

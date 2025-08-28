@@ -22,10 +22,10 @@ public class Main {
                 try {
                     if (showMenu) {
                         System.out.println("\nВыберите действие:");
-                        System.out.println("1. Записать данные в файл (WRITE)");
-                        System.out.println("2. Прочитать данные из файла (READ)");
-                        System.out.println("3. Удалить файл (DELETE_DATA)");
-                        System.out.println("4. Выйти (EXIT)");
+                        System.out.println("1. Записать данные в файл (WRITE(1))");
+                        System.out.println("2. Прочитать данные из файла (READ(2))");
+                        System.out.println("3. Удалить файл (DELETE_DATA(3))");
+                        System.out.println("4. Выйти (EXIT(4))");
                     }
 
                     System.out.print("Введите команду: ");
@@ -33,8 +33,9 @@ public class Main {
 
                     UserChoice choice;
                     try {
-                        choice = UserChoice.valueOf(input.toUpperCase());
-                    } catch (IllegalArgumentException e) {
+                        int inputValue = Integer.parseInt(input);
+                        choice = UserChoice.fromValue(inputValue);
+                    } catch (NumberFormatException e) {
                         System.out.println("Неверный выбор. Попробуйте еще раз.");
                         continue;
                     }
