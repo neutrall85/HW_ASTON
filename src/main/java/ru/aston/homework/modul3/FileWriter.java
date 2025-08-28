@@ -4,9 +4,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
 import java.nio.file.StandardOpenOption;
+import java.util.logging.Logger;
 
 
 class FileWriter implements FileProcessor {
+    final Logger logger = Logger.getLogger(getClass().getName());
     private final String filePath;
     private final String content;
 
@@ -27,7 +29,7 @@ class FileWriter implements FileProcessor {
             } else {
                 Files.writeString(Paths.get(filePath), content, StandardOpenOption.CREATE);
             }
-            System.out.println("Данные успешно записаны в файл");
+            logger.info("Данные успешно записаны в файл");
         } catch (IOException e) {
             throw new MyFileException("Ошибка при записи в файл: " + e.getMessage());
         }

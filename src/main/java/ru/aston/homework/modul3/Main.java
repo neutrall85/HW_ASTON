@@ -3,9 +3,11 @@ package ru.aston.homework.modul3;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class Main {
     private static Map<UserChoice, UserChoiceStrategy> choiceToStrategy = new HashMap<>();
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     static {
         choiceToStrategy.put(UserChoice.WRITE, new WriteStrategy());
@@ -36,14 +38,14 @@ public class Main {
                         int inputValue = Integer.parseInt(input);
                         choice = UserChoice.fromValue(inputValue);
                     } catch (NumberFormatException e) {
-                        System.out.println("Неверный выбор. Попробуйте еще раз.");
+                        logger.info("Неверный выбор. Попробуйте еще раз.");
                         continue;
                     }
 
                     UserChoiceStrategy strategy = choiceToStrategy.get(choice);
 
                     if (strategy == null) {
-                        System.out.println("Неизвестная команда. Попробуйте еще раз.");
+                        logger.info("Неизвестная команда. Попробуйте еще раз.");
                         continue;
                     }
 
@@ -52,19 +54,19 @@ public class Main {
                         showMenu = true;
                     } catch (MyFileException e) {
                         System.out.println();
-                        System.err.println("Ошибка: " + e.getMessage());
+                        logger.info("Ошибка: " + e.getMessage());
                         showMenu = false;
                     }
                 } catch (Exception e) {
                     System.out.println();
-                    System.err.println("Произошла ошибка: " + e.getMessage());
+                    logger.info("Произошла ошибка: " + e.getMessage());
                     showMenu = false;
                 }
             }
         } catch (Exception e) {
-            System.err.println("Ошибка ввода: " + e.getMessage());
+            logger.info("Ошибка ввода: " + e.getMessage());
         } finally {
-            System.out.println("Программа завершена");
+            logger.info("Программа завершена");
         }
     }
 }

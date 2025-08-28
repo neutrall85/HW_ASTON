@@ -1,8 +1,11 @@
 package ru.aston.homework.modul3;
 
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class ReadStrategy implements UserChoiceStrategy {
+    final Logger logger = Logger.getLogger(getClass().getName());
+
     @Override
     public void invoke(Scanner scanner) {
         System.out.print("Введите путь к файлу: ");
@@ -12,7 +15,7 @@ public class ReadStrategy implements UserChoiceStrategy {
             FileReader reader = new FileReader(filePath);
             reader.process();
         } catch (MyFileException e) {
-            System.err.println("Ошибка: " + e.getMessage());
+            logger.info("Ошибка: " + e.getMessage());
         }
     }
 }
