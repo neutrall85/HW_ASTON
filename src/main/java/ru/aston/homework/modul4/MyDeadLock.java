@@ -36,13 +36,13 @@ class MyDeadLock {
             if (threadNumber == 1) {
                 lock1.lock();
                 logger.info(THREAD + " " + threadNumber + ": захватил lock1");
-                Thread.sleep(100); // Имитация работы
+                Thread.sleep(100);
                 lock2.lock();
                 logger.info(THREAD + " " + threadNumber + ": захватил lock2");
             } else {
                 lock2.lock();
                 logger.info(THREAD + " " + threadNumber + ": захватил lock2");
-                Thread.sleep(100); // Имитация работы
+                Thread.sleep(100);
                 lock1.lock();
                 logger.info(THREAD + " " + threadNumber + ": захватил lock1");
             }
