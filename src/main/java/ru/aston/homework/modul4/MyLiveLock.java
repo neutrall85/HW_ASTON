@@ -11,61 +11,8 @@ public class MyLiveLock {
     private static final Lock resourceB = new ReentrantLock();
 
     public static void main(String[] args) {
-        Thread thread1 = new Thread(() -> {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    if (resourceA.tryLock()) {
-                        try {
-                            logger.info("Поток 1 получил ресурс A");
-
-                            if (resourceB.tryLock()) {
-                                try {
-                                    logger.info("Поток 1 получил ресурс B");
-                                    Thread.sleep(1000);
-                                } finally {
-                                    resourceB.unlock();
-                                    logger.info("Поток 1 освободил ресурс B");
-                                }
-                            }
-                        } finally {
-                            resourceA.unlock();
-                            logger.info("Поток 1 освободил ресурс A");
-                        }
-                    }
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                logger.severe("Поток 1 прерван: " + e.getMessage());
-            }
-        });
-
-        Thread thread2 = new Thread(() -> {
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    if (resourceB.tryLock()) {
-                        try {
-                            logger.info("Поток 2 получил ресурс B");
-
-                            if (resourceA.tryLock()) {
-                                try {
-                                    logger.info("Поток 2 получил ресурс A");
-                                    Thread.sleep(1000);
-                                } finally {
-                                    resourceA.unlock();
-                                    logger.info("Поток 2 освободил ресурс A");
-                                }
-                            }
-                        } finally {
-                            resourceB.unlock();
-                            logger.info("Поток 2 освободил ресурс B");
-                        }
-                    }
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                logger.severe("Поток 2 прерван: " + e.getMessage());
-            }
-        });
+        Thread thread1 = new Thread(new ResourceAcquirer("Поток 1", resourceA, resourceB));
+        Thread thread2 = new Thread(new ResourceAcquirer("Поток 2", resourceB, resourceA));
 
         thread1.start();
         thread2.start();
@@ -79,6 +26,51 @@ public class MyLiveLock {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             logger.severe("Основное выполнение прервано: " + e.getMessage());
+        }
+    }
+
+    static class ResourceAcquirer implements Runnable {
+        private final String threadName;
+        private final Lock firstResource;
+        private final Lock secondResource;
+
+        public ResourceAcquirer(String threadName, Lock firstResource, Lock secondResource) {
+            this.threadName = threadName;
+            this.firstResource = firstResource;
+            this.secondResource = secondResource;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    if (firstResource.tryLock()) {
+                        try {
+                            logger.info(threadName + " получил ресурс " + getResourceName(firstResource));
+
+                            if (secondResource.tryLock()) {
+                                try {
+                                    logger.info(threadName + " получил ресурс " + getResourceName(secondResource));
+                                    Thread.sleep(1000);
+                                } finally {
+                                    secondResource.unlock();
+                                    logger.info(threadName + " освободил ресурс " + getResourceName(secondResource));
+                                }
+                            }
+                        } finally {
+                            firstResource.unlock();
+                            logger.info(threadName + " освободил ресурс " + getResourceName(firstResource));
+                        }
+                    }
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                logger.severe(threadName + " прерван: " + e.getMessage());
+            }
+        }
+
+        private String getResourceName(Lock lock) {
+            return lock == resourceA ? "A" : "B";
         }
     }
 }
