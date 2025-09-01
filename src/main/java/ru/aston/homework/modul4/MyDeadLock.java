@@ -15,6 +15,19 @@ class MyDeadLock {
 
         thread1.start();
         thread2.start();
+
+        try {
+            thread1.join();
+            LOGGER.info("Первый поток завершен");
+
+            thread2.join();
+            LOGGER.info("Второй поток завершен");
+
+            LOGGER.info("Все потоки успешно завершены");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOGGER.info("Основной поток прерван: " + e.getMessage());
+        }
     }
 
     private static class LockAcquirer implements Runnable {
