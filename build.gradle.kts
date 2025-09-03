@@ -16,6 +16,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly ("org.projectlombok:lombok:1.18.38")
     annotationProcessor ("org.projectlombok:lombok:1.18.38")
+    implementation("org.jetbrains:annotations:23.0.0")
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("ch.qos.logback:logback-classic:1.5.13")
 }

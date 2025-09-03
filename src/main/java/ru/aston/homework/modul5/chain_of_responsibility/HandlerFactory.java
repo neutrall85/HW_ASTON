@@ -1,6 +1,6 @@
 package ru.aston.homework.modul5.chain_of_responsibility;
 
-public class HandlerFactory {
+public final class HandlerFactory {
 
     private HandlerFactory() {
         throw new UnsupportedOperationException("Cannot instantiate utility class");
