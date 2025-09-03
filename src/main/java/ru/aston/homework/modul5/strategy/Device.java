@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 @Setter
 public class Device {
-    private static final Logger logger = LoggerFactory.getLogger(Device.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Device.class);
 
     private String name;
     private ConfigurationStrategy configurationStrategy;
@@ -29,9 +29,9 @@ public class Device {
     }
 
     public void showComponents() {
-        logger.info("Компоненты {}:", name);
+        LOGGER.info("Компоненты {}:", name);
         for (Map.Entry<String, String> entry : components.entrySet()) {
-            logger.info("- {}: {}", entry.getKey(), entry.getValue());
+            LOGGER.info("- {}: {}", entry.getKey(), entry.getValue());
         }
     }
 }
