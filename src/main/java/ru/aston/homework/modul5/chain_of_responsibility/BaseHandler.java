@@ -1,12 +1,13 @@
 package ru.aston.homework.modul5.chain_of_responsibility;
 
+import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 @Setter
+@Getter
+@Slf4j
 public class BaseHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseHandler.class);
 
     protected BaseHandler successor;
     protected String handledType;
@@ -23,11 +24,11 @@ public class BaseHandler {
         } else if (successor != null) {
             successor.handleRequest(request);
         } else {
-            LOGGER.info("Никто не обработал запрос: {}", request.getContent());
+            log.info("Никто не обработал запрос: {}", request.getContent());
         }
     }
 
     protected void processRequest(Request request) {
-        LOGGER.info("{} обработал запрос: {}", handlerName, request.getContent());
+        log.info("{} обработал запрос: {}", handlerName, request.getContent());
     }
 }

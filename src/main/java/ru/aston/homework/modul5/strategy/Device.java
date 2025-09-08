@@ -2,13 +2,15 @@ package ru.aston.homework.modul5.strategy;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 @Setter
+@Getter
+@Slf4j
 public class Device {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Device.class);
 
     private String name;
     private ConfigurationStrategy configurationStrategy;
@@ -18,20 +20,22 @@ public class Device {
         this.name = name;
     }
 
-    public void configure() {
+    public Device configure() {
         if (configurationStrategy != null) {
             configurationStrategy.configure(this);
         }
+        return this;
     }
 
-    public void addComponent(String componentName, String componentValue) {
+    public Device addComponent(String componentName, String componentValue) {
         components.put(componentName, componentValue);
+        return this;
     }
 
     public void showComponents() {
-        LOGGER.info("Компоненты {}:", name);
+        log.info("Компоненты {}:", name);
         for (Map.Entry<String, String> entry : components.entrySet()) {
-            LOGGER.info("- {}: {}", entry.getKey(), entry.getValue());
+            log.info("- {}: {}", entry.getKey(), entry.getValue());
         }
     }
 }

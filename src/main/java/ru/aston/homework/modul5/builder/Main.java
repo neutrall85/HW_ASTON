@@ -1,24 +1,20 @@
 package ru.aston.homework.modul5.builder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
+@Slf4j
 public class Main {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        // Создаем пиццу пошагово
-        Pizza pizza = Pizza.builder()
-                .base(Base.THIN)
-                .cheese(Cheese.MOZZARELLA)
-                .sauce(Sauce.PESTO)
-                .crust(Crust.CLASSIC)
-                .size(Size.MEDIUM)
-                .toppings(List.of(Toppings.PEPPERONI, Toppings.MUSHROOMS, Toppings.TOMATOES))
+        Pizza pizza = new Pizza.Builder(
+                Base.THIN,
+                Cheese.MOZZARELLA,
+                Sauce.PESTO,
+                Crust.CLASSIC,
+                Size.MEDIUM)
+                .addToppings(Toppings.PEPPERONI, Toppings.MUSHROOMS, Toppings.TOMATOES)
                 .build();
 
-        LOGGER.info("{}", pizza);
+        log.info("{}", pizza);
     }
 }
