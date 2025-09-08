@@ -1,10 +1,9 @@
 package ru.aston.homework.modul5.adapter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Main {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
         LegacySystem legacy = new LegacySystem();
@@ -12,6 +11,6 @@ public class Main {
         Adapter adapter = new Adapter(legacy);
 
         String result = adapter.handleRequest("example data");
-        LOGGER.info(result);
+        log.info(result);
     }
 }
