@@ -1,23 +1,24 @@
 package ru.aston.homework.modul5.proxy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
+
+@Slf4j
 public class Main {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-
     public static void main(String[] args) {
-
-        BankAccount account = new SecureBankAccountProxy("secret");
-
         try {
-            account.deposit(1000);
-            account.withdraw(500);
-            double balance = account.getBalance();
+            BankAccount account = new SecureBankAccountProxy("secret");
 
-            LOGGER.info("Текущий баланс: {}", balance);
+            account.deposit(new BigDecimal(1000));
+            account.withdraw(new BigDecimal(500));
+            BigDecimal balance = account.getBalance();
+
+            log.info("Текущий баланс: {}", balance);
         } catch (SecurityException e) {
-            LOGGER.error(e.getMessage());
+            log.error("Ошибка безопасности: {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Произошла непредвиденная ошибка", e);
         }
     }
 }

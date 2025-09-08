@@ -1,6 +1,8 @@
 package ru.aston.homework.modul5.proxy;
 
-abstract class BaseBankAccountProxy implements BankAccount {
+import java.math.BigDecimal;
+
+public abstract class BaseBankAccountProxy implements BankAccount {
     protected RealBankAccount realBankAccount;
 
     protected BaseBankAccountProxy() {
@@ -8,19 +10,19 @@ abstract class BaseBankAccountProxy implements BankAccount {
     }
 
     @Override
-    public final void deposit(double amount) {
+    public final void deposit(BigDecimal amount) {
         checkAccess();
         realBankAccount.deposit(amount);
     }
 
     @Override
-    public final void withdraw(double amount) {
+    public final void withdraw(BigDecimal amount) {
         checkAccess();
         realBankAccount.withdraw(amount);
     }
 
     @Override
-    public final double getBalance() {
+    public final BigDecimal getBalance() {
         checkAccess();
         return realBankAccount.getBalance();
     }
