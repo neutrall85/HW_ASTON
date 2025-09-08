@@ -3,36 +3,37 @@ package ru.aston.homework.modul5.proxy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
+import java.math.BigDecimal;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
+@Slf4j
 public class RealBankAccount implements BankAccount {
-    private double balance;
-    private final Logger logger = LoggerFactory.getLogger(RealBankAccount.class);
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Override
-    public void deposit(double amount) {
-        balance += amount;
-        logger.info("Пополнено: {}", amount);
+    public void deposit(BigDecimal amount) {
+        balance = balance.add(amount);
+        log.info("Пополнено: {}", amount);
     }
 
     @Override
-    public void withdraw(double amount) {
-        if (balance >= amount) {
-            balance -= amount;
-            logger.info("Снято: {}", amount);
+    public void withdraw(BigDecimal amount) {
+        if (balance.compareTo(amount) >= 0) {
+            balance = balance.subtract(amount);
+            log.info("Снято: {}", amount);
         } else {
-            logger.warn("Попытка снятия средств. Недостаточно средств!");
+            log.warn("Попытка снятия средств. Недостаточно средств!");
         }
     }
 
     @Override
-    public double getBalance() {
-        logger.debug("Запрос баланса");
+    public BigDecimal getBalance() {
+        log.debug("Запрос баланса");
         return balance;
     }
 }
