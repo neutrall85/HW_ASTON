@@ -42,14 +42,36 @@ class MyHashMapTest {
     }
 
     @Test
-    void testNullKey() {
+    void testPutNullKey() {
+        Integer result = map.put(null, 1);
+        assertNull(result);
+        assertEquals(1, map.size());
+        assertEquals(1, map.get(null));
+    }
+
+    @Test
+    void testPutNullKeyUpdate() {
         map.put(null, 1);
-        assertNull(map.get(null));
+        Integer result = map.put(null, 2);
+        assertEquals(1, result);
+        assertEquals(1, map.size());
+        assertEquals(2, map.get(null));
+    }
+
+    @Test
+    void testPutNullValue() {
+        Integer result = map.put("key1", null);
+        assertNull(result);
+        assertEquals(1, map.size());
+        assertNull(map.get("key1"));
     }
 
     @Test
     void testRemove() {
         assertNull(map.remove(null));
+        map.put(null, 1);
+        assertEquals(1, map.remove(null));
+
 
         map.put("one", 1);
         map.put("two", 2);
